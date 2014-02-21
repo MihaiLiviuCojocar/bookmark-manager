@@ -23,9 +23,9 @@ get '/' do
 end
 
 post '/links' do
-  url = params["url"]
+  url   = params["url"]
   title = params["title"]
-  tags = params["tags"].split(" ").map do |tag|
+  tags  = params["tags"].split(" ").map do |tag|
     # this will either find this tag or create
     # it if it doesn't exist already
     Tag.first_or_create(:text => tag)
@@ -49,8 +49,10 @@ get '/users/new' do
 end
 
 post '/users' do
-  user = User.create(:email    => params[:email],
-              :password => params[:password])
+  user = User.create(:email                 => params[:email],
+                     :password              => params[:password],
+                     :password_confirmation => params[:password_confirmation])
+
   session[:user_id] = user.id
   redirect to('/')
 end
