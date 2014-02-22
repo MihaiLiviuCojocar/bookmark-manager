@@ -1,4 +1,5 @@
 env = ENV["RACK_ENV"] || "development"
+
 require 'sinatra'
 require 'data_mapper'
 require 'rack-flash'
@@ -6,15 +7,13 @@ require 'rack-flash'
 use Rack::Flash
 
 enable :sessions
-set :session_secret, 'super_secret'
+set    :session_secret, 'super_secret'
 
 # we're telling datamapper to use a postgres database on localhost. The name will be "bookmark_manager_test" or "bookmark_manager_development" depending on the environment
 DataMapper.setup(:default, "postgres://localhost/bookmark_manager_#{env}")
 
 require './lib/link' # this needs to be done after datamapper is initialised
 require './lib/user'
-# enable :sessions
-# set :session_secret, 'super secret'
 
 # After declaring your models, you should finalise them
 DataMapper.finalize
