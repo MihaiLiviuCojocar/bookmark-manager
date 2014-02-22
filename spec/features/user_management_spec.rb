@@ -1,6 +1,9 @@
 require 'spec_helper'
+require_relative '../helpers/session'
 
 feature "User signs up" do
+
+  include SessionHelpers
 
   # Strictly speaking, the tests that check the UI
   # (have_content, etc.) should be separate from the tests
@@ -39,19 +42,11 @@ feature "User signs up" do
     expect(page).to have_content("This email is already taken")
   end
 
-  def sign_up(email                 = "alice@example.com",
-              password              = "oranges!",
-              password_confirmation = "oranges!")
-    visit '/users/new'
-    fill_in :email,                 :with => email
-    fill_in :password,              :with => password
-    fill_in :password_confirmation, :with => password_confirmation
-    click_button "Sign up"
-  end
-
 end
 
 feature "User sings in" do
+
+  include SessionHelpers
 
   before(:each) do
     User.create(:email                 => "test@test.com" ,
@@ -73,11 +68,23 @@ feature "User sings in" do
     expect(page).not_to have_content('Welcome, test@test.com')
   end
 
-  def sign_in(email, password)
-    visit '/sessions/new'
-    fill_in 'email',    :with => email
-    fill_in 'password', :with => password
-    click_button 'Sign in'
+end
+
+feature "User signs out" do
+
+  include SessionHelpers
+
+  before(:each) do
+    User.create(:email                 => "test@test.com" ,
+                :password              => "test" ,
+                :password_confirmation => "test")
+  end
+
+  scenario "while being signed in" do
+    sign_in("test@test.com", "test")
+    click_button "Sign out"
+    expect(page).to have_content("Good bye!")
+    expect(page).not_to have_content("Welcome, test@test.com")
   end
 
 end

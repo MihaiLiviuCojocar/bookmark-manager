@@ -2,19 +2,26 @@
 <html>
 <head>
   <title>Bookmark Manager</title>
-  <link rel="stylesheet" type="text/css" href="/css/application.css">
+  <link rel = "stylesheet" type = "text/css" href = "/css/application.css">
 </head>
 <body>
   <% if flash[:notice] %>
-    <div id="notice"><%= flash[:notice] %></div>
+    <div id = "notice">
+      <%= flash[:notice] %>
+    </div>
   <% end %>
+
   <% if current_user %>
     Welcome, <%= current_user.email%>
+    <form method = "post" action = "/sessions" >
+      <input type = "hidden" name = "_method"  value = "delete">
+      <input type = "submit" name = "sign out" value = "Sign out">
+    </form>
   <% end %>
 
   <% if flash[:errors] && !flash[:errors].empty? %>
-  Sorry, there were the following problems with the form.
-    <ul id="errors">
+    Sorry, there were the following problems with the form.
+    <ul id = "errors">
       <% flash[:errors].each do |error| %>
         <li><%= error %></li>
       <% end %>
