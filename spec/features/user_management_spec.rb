@@ -27,7 +27,16 @@ feature "User signs up" do
     sign_up('a@a.com', 'orange', '')
     expect(User.count).to eq(0)
     expect(current_path).to eq('/users')
-    expect(page).to have_content("Sorry, your passwords don't match")
+    expect(page).to have_content("Your passwords don't match")
+  end
+
+  scenario "with an email that is already registered" do
+    expect(User.count).to eq(0)
+    sign_up
+    expect(User.count).to eq(1)
+    sign_up
+    expect(User.count).to eq(1)
+    expect(page).to have_content("This email is already taken")
   end
 
   def sign_up(email                 = "alice@example.com",
